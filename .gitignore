@@ -9,6 +9,11 @@ dist/
 web-build/
 expo-env.d.ts
 
+# Environment files
+.env
+.env.local
+.env*.local
+
 # Native
 .kotlin/
 *.orig.*
@@ -21,17 +26,18 @@ expo-env.d.ts
 # Metro
 .metro-health-check*
 
-# debug
+# debug & logs
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
-# macOS
+# macOS & Editor
 .DS_Store
 *.pem
-
-# local env files
-.env*.local
+.claude/
+.vscode/
+.idea/
 
 # typescript
 *.tsbuildinfo
