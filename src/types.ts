@@ -1,56 +1,14 @@
-export interface LocalizedString {
-  en: string;
-  hi: string;
-}
+/**
+ * App-local UI types.
+ *
+ * Domain types (Listing, CartItem, Order, …) now live in `@arli/contracts`,
+ * and design tokens in `@arli/tokens`. What remains here is presentation-only.
+ */
 
-export interface Listing {
-  id: number;
-  cat: 'fabric' | 'garment' | 'service' | 'all';
-  price: number;
-  base: string;
-  acc: string;
-  sponsored: boolean;
-  rating: string;
-  reviews: number;
-  pincode: string;
-  measurable: boolean;
-  name: LocalizedString;
-  shop: LocalizedString;
-  desc: LocalizedString;
-}
-
-export interface Review {
-  who: string;
-  stars: string;
-  text: string;
-}
-
-export interface Order {
-  id: string;
-  cust: LocalizedString;
-  item: LocalizedString;
-  qty: number;
-  amt: number;
-  meas: boolean;
-  status: number; // 0: Placed, 1: Accepted, 2: In progress, 3: Ready, 4: Delivered
-}
-
+/** A chat bubble. `align`/`bg`/`fg` are styling, not domain data. */
 export interface Message {
   align: 'flex-start' | 'flex-end';
   bg: string;
   fg: string;
   text: string;
-}
-
-export interface CartItem {
-  id: number;
-  name: string;
-  shop: string;
-  price: number;
-  unit: string;
-  qty: number;
-  hasMeas: boolean;
-  hasDesign: boolean;
-  swatch: string;
-  total: number;
 }

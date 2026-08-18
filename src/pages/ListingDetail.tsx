@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import { Listing } from '../types';
-import { Theme } from '../theme';
+import type { Listing } from '@arli/contracts';
+import { theme as Theme } from '@arli/tokens';
 
 interface ListingDetailProps {
   item: Listing | null;

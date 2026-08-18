@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { Message } from '../types';
-import { Theme } from '../theme';
+import type { Message } from '../types';
+import { theme as Theme } from '@arli/tokens';
 
 interface ChatProps {
   t: any;

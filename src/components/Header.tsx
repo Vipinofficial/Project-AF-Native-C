@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Theme } from '../theme';
+import { theme as Theme } from '@arli/tokens';
 
 interface HeaderProps {
   t: any;

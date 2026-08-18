@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Theme } from '../theme';
+import { theme as Theme } from '@arli/tokens';
 
 interface OfferCardProps {
   mark: string;

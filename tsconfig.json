@@ -1,6 +1,10 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    // The @arli/* workspace packages ship raw TypeScript with explicit .ts
+    // import extensions, so they resolve identically under Node, Vite and Metro.
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   }
 }

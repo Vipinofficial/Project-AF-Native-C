@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
-import { Theme } from '../theme';
+import { theme as Theme } from '@arli/tokens';
 
 interface LoginProps {
   t: any;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { Listing } from '../types';
+import type { Listing } from '@arli/contracts';
 import { ListingCard } from '../components/ListingCard';
-import { Theme } from '../theme';
+import { theme as Theme } from '@arli/tokens';
 
 interface ExploreProps {
   listings: Listing[];

@@ -1,12 +1,16 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import { CartItem } from '../types';
-import { Theme } from '../theme';
+import type { CartItem } from '@arli/contracts';
+import { theme as Theme } from '@arli/tokens';
+import { type CartTotals, lineTotal } from '@arli/core';
+import type { CustomerDictionary } from '@arli/i18n';
 
 interface CartProps {
   cartItems: CartItem[];
-  onRemoveItem: (id: number) => void;
-  t: any;
+  /** Computed once in App, so cart and checkout cannot diverge. */
+  totals: CartTotals;
+  onRemoveItem: (id: string) => void;
+  t: CustomerDictionary;
   onProceed: () => void;
   promo: string;
   promoApplied: boolean;
@@ -19,6 +23,7 @@ interface CartProps {
 
 export const Cart: React.FC<CartProps> = ({
   cartItems,
+  totals,
   onRemoveItem,
   t,
   onProceed,
@@ -31,9 +36,7 @@ export const Cart: React.FC<CartProps> = ({
   onStartShopping,
 }) => {
   const hasCart = cartItems.length > 0;
-  const subtotal = cartItems.reduce((acc, item) => acc + item.total, 0);
-  const discountAmt = promoApplied && promoOk ? Math.round(subtotal * 0.1) : 0;
-  const total = subtotal - discountAmt;
+  const { subtotal, discount: discountAmt, total } = totals;
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: 16, paddingBottom: 60 }}>
@@ -52,7 +55,7 @@ export const Cart: React.FC<CartProps> = ({
                   {ci.hasMeas && <Text style={styles.itemBadge}>📏 {t.measAttached}</Text>}
                 </View>
                 <View style={styles.itemRight}>
-                  <Text style={styles.itemPrice}>₹{ci.total}</Text>
+                  <Text style={styles.itemPrice}>₹{lineTotal(ci)}</Text>
                   <TouchableOpacity onPress={() => onRemoveItem(ci.id)} style={styles.removeBtn}>
                     <Text style={styles.removeText}>{t.remove}</Text>
                   </TouchableOpacity>
