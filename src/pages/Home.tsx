@@ -66,8 +66,8 @@ export const Home: React.FC<HomeProps> = ({
       {/* Offers details */}
       <View style={styles.offersSection}>
         <Text style={styles.sectionHeader}>{t.offersLabel}</Text>
-        <OfferCard mark="% ARLI10" title={t.offer1} sub="10% discount first order" />
-        <OfferCard mark="★ STAR" title={t.offer2} sub="Earn loyalty rewards" />
+        <OfferCard mark="% ARLI10" title={t.offer1} sub={t.offer1Sub} />
+        <OfferCard mark="★ STAR" title={t.offer2} sub={t.offer2Sub} />
       </View>
 
       {/* Products list */}
@@ -81,7 +81,7 @@ export const Home: React.FC<HomeProps> = ({
 
         {listings.length === 0 ? (
           <View style={styles.emptyBox}>
-            <Text style={styles.emptyText}>No listings loaded yet.</Text>
+            <Text style={styles.emptyText}>{t.noListings}</Text>
           </View>
         ) : (
           listings.slice(0, 4).map((item) => (

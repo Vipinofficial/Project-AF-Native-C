@@ -61,7 +61,8 @@ export default function App() {
   // Promocodes
   const [promo, setPromo] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
-  const [listingsError, setListingsError] = useState<string | null>(null);
+  const [listingsError, setListingsError] =
+    useState<'serverUnreachable' | 'loadFailed' | null>(null);
 
   // Fetch listings from backend Express server
   useEffect(() => {
@@ -74,9 +75,7 @@ export default function App() {
       .catch((err: unknown) => {
         setListings([]);
         setListingsError(
-          err instanceof ApiError && err.kind === 'network'
-            ? 'Cannot reach the ARLI server.'
-            : 'Could not load listings.',
+          err instanceof ApiError && err.kind === 'network' ? 'serverUnreachable' : 'loadFailed',
         );
       });
   }, []);
@@ -160,6 +159,9 @@ export default function App() {
       />
 
       <View style={styles.body}>
+        {listingsError && (
+          <Text style={styles.errorBanner}>{currentT[listingsError]}</Text>
+        )}
         {screen === 'home' && (
           <Home
             listings={listings}
@@ -254,6 +256,17 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: Theme.bgPrimary,
+  },
+  errorBanner: {
+    marginHorizontal: 16,
+    marginTop: 10,
+    paddingVertical: 9,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    backgroundColor: Theme.colorWarningBg,
+    color: Theme.colorWarningText,
+    fontSize: 13,
+    fontFamily: Theme.fontSansSemiBold,
   },
   body: {
     flex: 1,
