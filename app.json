@@ -22,11 +22,13 @@
       },
       "predictiveBackGestureEnabled": false,
       "package": "in.arli.customer",
-      "versionCode": 1,
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
-        "CAMERA"
+        "CAMERA",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.CAMERA"
       ]
     },
     "web": {
@@ -49,6 +51,12 @@
           "recordAudioAndroid": false
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b492a102-5768-4420-8b42-cab42eae3860"
+      }
+    },
+    "owner": "vipinkumarsoni"
   }
 }
