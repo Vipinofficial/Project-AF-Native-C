@@ -20,7 +20,7 @@ export const ListingDetail: React.FC<ListingDetailProps> = ({
   onAddToCart,
   onChatWithShop,
 }) => {
-  if (!item) return <View style={styles.errorBoxReady}><Text>No listing selected.</Text></View>;
+  if (!item) return <View style={styles.errorBoxReady}><Text>{t.noListingSelected}</Text></View>;
 
   const [qty, setQty] = useState(1);
   const [attachMeas, setAttachMeas] = useState(false);
@@ -93,11 +93,11 @@ export const ListingDetail: React.FC<ListingDetailProps> = ({
             {attachMeas && (
               <View style={styles.measGrid}>
                 <View style={styles.measCol}>
-                  <Text style={styles.measHeader}>Chest</Text>
+                  <Text style={styles.measHeader}>{t.measChest}</Text>
                   <TextInput value={chest} onChangeText={setChest} keyboardType="numeric" style={styles.measInput} />
                 </View>
                 <View style={styles.measCol}>
-                  <Text style={styles.measHeader}>Waist</Text>
+                  <Text style={styles.measHeader}>{t.measWaist}</Text>
                   <TextInput value={waist} onChangeText={setWaist} keyboardType="numeric" style={styles.measInput} />
                 </View>
                 <View style={styles.measCol}>
