@@ -26,8 +26,10 @@ import { Login } from './src/pages/Login';
 import { Chat } from './src/pages/Chat';
 import type { Listing, CartItem } from '@arli/contracts';
 import { getCustomerDictionary, toggleLang as flipLang, otherLangLabel, type Lang } from '@arli/i18n';
-import { cartTotals, priceUnit } from '@arli/core';
+import { cartTotals, priceUnit, nearestListings, locatableCount } from '@arli/core';
 import { ApiError } from '@arli/api-client';
+import { useNearbyLocation } from './src/hooks/useNearbyLocation';
+import { TryOn } from './src/pages/TryOn';
 import { api } from './src/api';
 import { theme as Theme } from '@arli/tokens';
 
@@ -135,6 +137,18 @@ export default function App() {
 
   const currentT = getCustomerDictionary(lang);
 
+  // Location permission + coordinates for "shops near me".
+  const nearby = useNearbyLocation();
+
+  // When we have a fix, rank by real distance; otherwise leave order untouched
+  // so the catalogue never silently changes under the user.
+  const nearbyListings = nearby.coords
+    ? nearestListings(listings, nearby.coords).map((r) => r.listing)
+    : null;
+  const nearbyDistances = nearby.coords
+    ? new Map(nearestListings(listings, nearby.coords).map((r) => [r.listing.id, r.distanceKm]))
+    : null;
+
   // One promo calculation, shared with the cart — the same fix applied to the
   // web customer app.
   const totals = cartTotals(cart, promoApplied ? promo : '');
@@ -176,7 +190,13 @@ export default function App() {
         )}
         {screen === 'explore' && (
           <Explore
-            listings={listings}
+            listings={nearbyListings ?? listings}
+            distances={nearbyDistances}
+            locationStatus={nearby.status}
+            locationErrorKey={nearby.errorKey}
+            locatableCount={locatableCount(listings)}
+            onUseMyLocation={nearby.request}
+            onClearLocation={nearby.clear}
             query={query}
             pincode={pincode}
             priceMax={priceMax}
@@ -198,6 +218,7 @@ export default function App() {
             onBack={() => setScreen('explore')}
             onAddToCart={handleAddToCart}
             onChatWithShop={() => handleNavigate('chat')}
+            onTryOn={() => setScreen('tryOn')}
           />
         )}
         {screen === 'cart' && (
@@ -233,6 +254,14 @@ export default function App() {
               setScreen('home');
             }}
             lang={lang}
+          />
+        )}
+        {screen === 'tryOn' && (
+          <TryOn
+            item={activeListing}
+            t={currentT}
+            lang={lang}
+            onBack={() => setScreen('listingDetail')}
           />
         )}
         {screen === 'chat' && (

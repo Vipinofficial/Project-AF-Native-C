@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import type { Listing } from '@arli/contracts';
+import { formatDistance } from '@arli/core';
+import type { CustomerDictionary } from '@arli/i18n';
 import { ListingCard } from '../components/ListingCard';
 import { theme as Theme } from '@arli/tokens';
+import type { LocationStatus } from '../hooks/useNearbyLocation';
 
 interface ExploreProps {
   listings: Listing[];
@@ -10,8 +13,16 @@ interface ExploreProps {
   pincode: string;
   priceMax: string;
   cat: string;
-  t: any;
+  t: CustomerDictionary;
   lang: 'en' | 'hi';
+  /** Distance in km per listing id, when a location fix is available. */
+  distances: Map<number, number> | null;
+  locationStatus: LocationStatus;
+  locationErrorKey: 'locDenied' | 'locBlocked' | 'locUnavailable' | null;
+  /** How many listings could be placed on a map at all. */
+  locatableCount: number;
+  onUseMyLocation: () => void;
+  onClearLocation: () => void;
   onQueryChange: (val: string) => void;
   onPincodeChange: (val: string) => void;
   onPriceMaxChange: (val: string) => void;
@@ -32,6 +43,12 @@ export const Explore: React.FC<ExploreProps> = ({
   onPriceMaxChange,
   onCatChange,
   onSelectListing,
+  distances,
+  locationStatus,
+  locationErrorKey,
+  locatableCount,
+  onUseMyLocation,
+  onClearLocation,
 }) => {
   const catChips = [
     { id: 'all', label: t.catAll },
@@ -114,6 +131,30 @@ export const Explore: React.FC<ExploreProps> = ({
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll}>
+        {/* Shops near me. Only offered when at least one shop can actually be
+            located, so the button never leads to an empty list. */}
+        {locationStatus === 'granted' ? (
+          <TouchableOpacity style={styles.nearActive} onPress={onClearLocation}>
+            <Text style={styles.nearActiveText}>📍 {t.sortNearest}  ✕</Text>
+          </TouchableOpacity>
+        ) : locatableCount > 0 ? (
+          <TouchableOpacity
+            style={styles.nearBtn}
+            onPress={onUseMyLocation}
+            disabled={locationStatus === 'requesting'}
+          >
+            <Text style={styles.nearBtnText}>
+              {locationStatus === 'requesting' ? t.locating : `📍 ${t.useMyLocation}`}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <Text style={styles.noticeText}>{t.noLocatableShops}</Text>
+        )}
+
+        {locationErrorKey && (
+          <Text style={styles.errorText}>{t[locationErrorKey]}</Text>
+        )}
+
         <Text style={styles.resultsText}>
           {filtered.length} {t.resultsFound}
         </Text>
@@ -124,13 +165,19 @@ export const Explore: React.FC<ExploreProps> = ({
           </View>
         ) : (
           filtered.map((item) => (
-            <ListingCard
-              key={item.id}
-              item={item}
-              lang={lang}
-              t={t}
-              onClick={() => onSelectListing(item.id)}
-            />
+            <View key={item.id}>
+              <ListingCard
+                item={item}
+                lang={lang}
+                t={t}
+                onClick={() => onSelectListing(item.id)}
+              />
+              {distances?.has(item.id) && (
+                <Text style={styles.distanceText}>
+                  📍 {formatDistance(distances.get(item.id)!)} {t.awayFromYou}
+                </Text>
+              )}
+            </View>
           ))
         )}
       </ScrollView>
@@ -139,6 +186,26 @@ export const Explore: React.FC<ExploreProps> = ({
 };
 
 const styles = StyleSheet.create({
+  nearBtn: {
+    borderWidth: 1.5, borderColor: Theme.borderColor, borderRadius: 999,
+    paddingVertical: 12, alignItems: 'center', marginBottom: 12,
+    backgroundColor: Theme.colorCardBg, minHeight: 48, justifyContent: 'center',
+  },
+  nearBtnText: { fontSize: 14, fontFamily: Theme.fontSansBold, color: Theme.colorPrimary },
+  nearActive: {
+    borderRadius: 999, paddingVertical: 12, alignItems: 'center', marginBottom: 12,
+    backgroundColor: Theme.colorPrimary, minHeight: 48, justifyContent: 'center',
+  },
+  nearActiveText: { fontSize: 14, fontFamily: Theme.fontSansBold, color: Theme.colorCream },
+  noticeText: { fontSize: 12.5, color: Theme.textMuted, marginBottom: 12, textAlign: 'center' },
+  errorText: {
+    fontSize: 12.5, color: Theme.colorWarningText, backgroundColor: Theme.colorWarningBg,
+    padding: 10, borderRadius: 10, marginBottom: 12, lineHeight: 18,
+  },
+  distanceText: {
+    fontSize: 11.5, color: Theme.textMuted, fontFamily: Theme.fontSansSemiBold,
+    marginTop: -6, marginBottom: 10, marginLeft: 4,
+  },
   container: {
     backgroundColor: Theme.bgPrimary,
     flex: 1,

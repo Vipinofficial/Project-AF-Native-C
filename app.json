@@ -1,13 +1,17 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "ARLI",
+    "slug": "arli-customer",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "ARLI uses your location to show fabric shops, boutiques and tailors near you.",
+        "NSCameraUsageDescription": "ARLI uses your camera so you can try a garment on before you order it."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -16,13 +20,35 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "in.arli.customer",
+      "versionCode": 1,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "ARLI uses your location to show fabric shops, boutiques and tailors near you.",
+          "locationWhenInUsePermission": "ARLI uses your location to show fabric shops, boutiques and tailors near you."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "ARLI uses your camera so you can try a garment on before you order it.",
+          "microphonePermission": "Not used. ARLI never records audio.",
+          "recordAudioAndroid": false
+        }
+      ]
     ]
   }
 }

@@ -10,6 +10,7 @@ interface ListingDetailProps {
   onBack: () => void;
   onAddToCart: (qty: number, attachMeas: boolean) => void;
   onChatWithShop: () => void;
+  onTryOn: () => void;
 }
 
 export const ListingDetail: React.FC<ListingDetailProps> = ({
@@ -19,6 +20,7 @@ export const ListingDetail: React.FC<ListingDetailProps> = ({
   onBack,
   onAddToCart,
   onChatWithShop,
+  onTryOn,
 }) => {
   if (!item) return <View style={styles.errorBoxReady}><Text>{t.noListingSelected}</Text></View>;
 
@@ -119,6 +121,12 @@ export const ListingDetail: React.FC<ListingDetailProps> = ({
           </TouchableOpacity>
         </View>
 
+        {item.cat !== 'fabric' && (
+          <TouchableOpacity onPress={onTryOn} style={styles.tryOnBtn}>
+            <Text style={styles.tryOnBtnText}>📸 {t.tryOn}</Text>
+          </TouchableOpacity>
+        )}
+
         <Text style={styles.payNote}>🏪 {t.payAtShop}</Text>
       </View>
     </ScrollView>
@@ -126,6 +134,12 @@ export const ListingDetail: React.FC<ListingDetailProps> = ({
 };
 
 const styles = StyleSheet.create({
+  tryOnBtn: {
+    marginTop: 12, borderWidth: 1.5, borderColor: Theme.colorPrimary,
+    borderRadius: 12, paddingVertical: 13, alignItems: 'center',
+    minHeight: 48, justifyContent: 'center',
+  },
+  tryOnBtnText: { fontSize: 14, fontFamily: Theme.fontSansBold, color: Theme.colorPrimary },
   container: {
     backgroundColor: Theme.bgPrimary,
     flex: 1,
