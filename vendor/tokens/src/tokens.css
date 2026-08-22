@@ -1,0 +1,42 @@
+/* GENERATED FILE — do not edit.
+ * Source: packages/tokens/src/tokens.ts
+ * Regenerate: npm run build:css
+ */
+
+:root {
+  /* Colours */
+  --bg-primary: #FAF6F0;
+  --bg-secondary: #F4ECE1;
+  --color-card-bg: #FFFFFF;
+  --color-cream: #FAF5EC;
+  --border-color: #E4DBC8;
+  --border-focus: #1A2542;
+  --text-primary: #1A2542;
+  --text-secondary: #4A5568;
+  --text-muted: #718096;
+  --color-placeholder: #A0AEC0;
+  --color-primary: #1A2542;
+  --color-primary-hover: #111827;
+  --color-accent: #C2492F;
+  --color-accent-hover: #9B3823;
+  --color-gold: #D4AF37;
+  --color-nav-active: #2A3B66;
+  --color-nav-inactive: #8A8270;
+  --color-success: #1E4D3B;
+  --color-success-text: #2E7D5B;
+  --color-success-bg: #E2F0D9;
+  --color-warning: #D4AF37;
+  --color-warning-text: #A5732A;
+  --color-warning-bg: #FBF3E0;
+  --color-amber: #E9A23B;
+  --color-ink: #22201C;
+
+  /* Spacing */
+  --page-px: 16px;
+  --page-px-md: 24px;
+  --page-px-lg: 80px;
+
+  /* Typography */
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+}
