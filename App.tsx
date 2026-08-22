@@ -22,6 +22,7 @@ import { Home } from './src/pages/Home';
 import { Explore } from './src/pages/Explore';
 import { ListingDetail } from './src/pages/ListingDetail';
 import { Cart } from './src/pages/Cart';
+import { Checkout } from './src/pages/Checkout';
 import { Login } from './src/pages/Login';
 import { Chat } from './src/pages/Chat';
 import type { Listing, CartItem } from '@arli/contracts';
@@ -226,16 +227,7 @@ export default function App() {
             cartItems={cart}
             onRemoveItem={handleRemoveCartItem}
             t={currentT}
-            onProceed={() => {
-              if (loggedIn) {
-                setCart([]);
-                setPoints((prev) => prev + 10);
-                setScreen('home');
-                alert(lang === 'hi' ? 'ऑर्डर सफलतापूर्वक भेजा गया!' : 'Stitching Order Placed Successfully!');
-              } else {
-                setScreen('login');
-              }
-            }}
+            onProceed={() => setScreen(loggedIn ? 'checkout' : 'login')}
             promo={promo}
             promoApplied={promoApplied}
             totals={totals}
@@ -244,6 +236,20 @@ export default function App() {
             onPromoChange={setPromo}
             onApplyPromo={handleApplyPromo}
             onStartShopping={() => setScreen('explore')}
+          />
+        )}
+        {screen === 'checkout' && (
+          <Checkout
+            cartItems={cart}
+            totals={totals}
+            t={currentT}
+            onClearCart={() => {
+              setCart([]);
+              setPromo('');
+              setPromoApplied(false);
+            }}
+            onNavigate={handleNavigate}
+            onAddPoints={(p) => setPoints((prev) => prev + p)}
           />
         )}
         {screen === 'login' && (
