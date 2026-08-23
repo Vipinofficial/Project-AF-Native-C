@@ -24,6 +24,7 @@ import { ListingDetail } from './src/pages/ListingDetail';
 import { Cart } from './src/pages/Cart';
 import { Checkout } from './src/pages/Checkout';
 import { Login } from './src/pages/Login';
+import { Profile } from './src/pages/Profile';
 import { Chat } from './src/pages/Chat';
 import { AIFeatures } from './src/pages/AIFeatures';
 import type { Listing, CartItem } from '@arli/contracts';
@@ -67,6 +68,13 @@ export default function App() {
 
   // User details
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userPhone, setUserPhone] = useState('');
+  // Bumped on every logout to force Login to remount with fresh internal
+  // state. Without this, React reuses the same <Login> instance across
+  // navigations, so its own phone/OTP/step state from a much earlier session
+  // silently resurfaces — a logged-out user could land back on someone else's
+  // half-completed OTP screen.
+  const [loginKey, setLoginKey] = useState(0);
   const [points, setPoints] = useState(0);
   const [cart, setCart] = useState<CartItem[]>([]);
 
@@ -260,12 +268,29 @@ export default function App() {
         )}
         {screen === 'login' && (
           <Login
+            key={loginKey}
             t={currentT}
-            onLoginSuccess={() => {
+            onLoginSuccess={(phone) => {
               setLoggedIn(true);
+              setUserPhone(phone);
               setScreen('home');
             }}
             lang={lang}
+          />
+        )}
+        {screen === 'profile' && (
+          <Profile
+            t={currentT}
+            loggedIn={loggedIn}
+            phone={userPhone}
+            points={points}
+            onLogout={() => {
+              setLoggedIn(false);
+              setUserPhone('');
+              setLoginKey((k) => k + 1);
+              setScreen('home');
+            }}
+            onNavigate={handleNavigate}
           />
         )}
         {screen === 'tryOn' && (

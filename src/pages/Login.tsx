@@ -4,7 +4,7 @@ import { theme as Theme } from '@arli/tokens';
 
 interface LoginProps {
   t: any;
-  onLoginSuccess: () => void;
+  onLoginSuccess: (phone: string) => void;
   lang: 'en' | 'hi';
 }
 
@@ -24,7 +24,7 @@ export const Login: React.FC<LoginProps> = ({ t, onLoginSuccess, lang }) => {
 
   const handleVerifyOtp = () => {
     if (otp.length === 4) {
-      onLoginSuccess();
+      onLoginSuccess(phone.trim());
     } else {
       Alert.alert(lang === 'hi' ? 'त्रुटि' : 'Error', lang === 'hi' ? '4 अंकों का कोड डालें' : 'Please enter 4 digits');
     }
@@ -59,11 +59,11 @@ export const Login: React.FC<LoginProps> = ({ t, onLoginSuccess, lang }) => {
             <Text style={styles.orText}>{t.or}</Text>
 
             {/* Google and Devfrogs buttons stacked */}
-            <TouchableOpacity onPress={onLoginSuccess} style={styles.thirdPartyBtn}>
+            <TouchableOpacity onPress={() => onLoginSuccess(phone.trim())} style={styles.thirdPartyBtn}>
               <Text style={styles.thirdPartyText}>G  {t.googleBtn}</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={onLoginSuccess} style={[styles.thirdPartyBtn, { marginTop: 8 }]}>
+            <TouchableOpacity onPress={() => onLoginSuccess(phone.trim())} style={[styles.thirdPartyBtn, { marginTop: 8 }]}>
               <Text style={styles.thirdPartyText}>🐸  {t.devfrogsBtn || 'Continue with Devfrogs'}</Text>
             </TouchableOpacity>
           </View>

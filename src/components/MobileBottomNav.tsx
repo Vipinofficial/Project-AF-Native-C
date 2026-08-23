@@ -64,15 +64,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
       ),
     },
     {
-      // Distinct from the Home tab's id even when logged in — reusing 'home'
-      // here collided with it: two <TouchableOpacity key="home"> siblings
-      // (React warning), and both icons showing "active" simultaneously
-      // whenever screen === 'home', since both compared equal to currentScreen.
-      // There is no dedicated account screen yet, so navigation still lands on
-      // Home; only the identity used for the key and the active-state check
-      // changes.
-      id: loggedIn ? 'account' : 'login',
-      label: loggedIn ? t.navAccount : (t.navLogin || 'Login'),
+      // 'profile', not 'home' — reusing 'home' here once collided with the
+      // real Home tab (duplicate React key, both icons "active" at once).
+      // Now a real Profile screen exists (phone number, points, logout).
+      id: loggedIn ? 'profile' : 'login',
+      label: loggedIn ? t.navProfile : (t.navLogin || 'Login'),
       icon: (active: boolean) => (
         <Svg width="22" height="22" viewBox="0 0 24 24" fill={active ? '#2A3B66' : 'none'} stroke={active ? '#2A3B66' : '#8A8270'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <Path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -101,7 +97,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             <TouchableOpacity
               key={tab.id}
               activeOpacity={0.7}
-              onPress={() => onNavigate(tab.id === 'account' ? 'home' : tab.id)}
+              onPress={() => onNavigate(tab.id)}
               style={styles.navButton}
             >
               <View style={styles.iconWrapper}>
