@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Line } from 'react-native-svg';
 
 interface MobileBottomNavProps {
@@ -50,11 +51,15 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
       ),
     },
     {
-      id: 'chat',
-      label: t.navChat || 'Chat',
+      // Chat used to live here as a global, contextless tab. Chat only makes
+      // sense once there is a shop to talk to, and that context already
+      // exists on every listing page (product AND service) via its own chat
+      // button — so this slot is AI Features instead.
+      id: 'aiFeatures',
+      label: t.navAI,
       icon: (active: boolean) => (
-        <Svg width="22" height="22" viewBox="0 0 24 24" fill={active ? '#2A3B66' : 'none'} stroke={active ? '#2A3B66' : '#8A8270'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <Path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        <Svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={active ? '#C2492F' : '#8A8270'} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <Path d="M12 3l1.8 5.5H20l-4.7 3.4 1.8 5.5L12 14l-5.1 3.4 1.8-5.5L4 8.5h6.2L12 3z" fill={active ? '#C2492F' : 'none'} />
         </Svg>
       ),
     },
@@ -77,8 +82,18 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     },
   ];
 
+  // A hardcoded `bottom: 16` put the pill's clearance from the physical edge
+  // at the mercy of whatever nav mode the device is in: fine on 3-button
+  // navigation, but on gesture navigation the system reserves a taller strip
+  // at the bottom for the gesture handle, and a fixed constant does not know
+  // that strip exists — the pill (or its labels) can end up crowded against
+  // or under it. insets.bottom is the actual reserved height for THIS device,
+  // so 16 stays a real 16px of breathing room above the system UI rather than
+  // an assumption that never accounted for it.
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.floatingNavContainer}>
+    <View style={[styles.floatingNavContainer, { bottom: 16 + insets.bottom }]}>
       <View style={styles.floatingNavPill}>
         {tabs.map((tab) => {
           const isActive = currentScreen === tab.id;
@@ -111,7 +126,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 const styles = StyleSheet.create({
   floatingNavContainer: {
     position: 'absolute',
-    bottom: 16,
+    // bottom is supplied inline above (16 + the device's real safe-area inset).
     left: 16,
     right: 16,
     alignItems: 'center',

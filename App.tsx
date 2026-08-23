@@ -25,6 +25,7 @@ import { Cart } from './src/pages/Cart';
 import { Checkout } from './src/pages/Checkout';
 import { Login } from './src/pages/Login';
 import { Chat } from './src/pages/Chat';
+import { AIFeatures } from './src/pages/AIFeatures';
 import type { Listing, CartItem } from '@arli/contracts';
 import { getCustomerDictionary, toggleLang as flipLang, otherLangLabel, type Lang } from '@arli/i18n';
 import { cartTotals, priceUnit, nearestListings, locatableCount } from '@arli/core';
@@ -280,6 +281,9 @@ export default function App() {
             t={currentT}
             lang={lang}
           />
+        )}
+        {screen === 'aiFeatures' && (
+          <AIFeatures t={currentT} onBrowse={() => setScreen('explore')} />
         )}
       </View>
 

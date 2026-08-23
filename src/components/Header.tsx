@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
         <TouchableOpacity onPress={() => onNavigate('home')} style={styles.logoBox}>
           <View style={styles.logoRow}>
             <Text style={styles.brandName}>ARLI</Text>
-            <Text style={styles.subBrand}>FASHION</Text>
+            <Text style={styles.subBrand}>BRAND</Text>
           </View>
           <Text style={styles.tagline}>by fashion vendors</Text>
         </TouchableOpacity>
