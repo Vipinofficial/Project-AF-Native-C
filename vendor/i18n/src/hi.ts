@@ -92,6 +92,7 @@ export const hi: Dictionary = {
     loyaltyPts: 'लॉयल्टी पॉइंट',
     measChest: 'छाती',
     measWaist: 'कमर',
+    navAccount: 'खाता',
     navCart: 'कार्ट',
     navChat: 'चैट',
     navExplore: 'बाज़ार',

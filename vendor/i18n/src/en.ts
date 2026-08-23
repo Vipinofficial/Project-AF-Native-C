@@ -90,6 +90,7 @@ export const en = {
     loyaltyPts: 'loyalty points',
     measChest: 'Chest',
     measWaist: 'Waist',
+    navAccount: 'Account',
     navCart: 'Cart',
     navChat: 'Chat',
     navExplore: 'Explore',

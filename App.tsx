@@ -47,6 +47,13 @@ export default function App() {
     InstrumentSans_700Bold
   });
 
+  // Location permission + coordinates for "shops near me". Declared here,
+  // before the fontsLoaded early return below, because it is a HOOK (it calls
+  // useState internally) — a hook after a conditional return changes how many
+  // hooks run between the loading render and the loaded one, which crashes
+  // with "Rendered more hooks than during the previous render."
+  const nearby = useNearbyLocation();
+
   const [screen, setScreen] = useState('home');
   const [lang, setLang] = useState<Lang>('en');
   const [query, setQuery] = useState('');
@@ -138,8 +145,6 @@ export default function App() {
 
   const currentT = getCustomerDictionary(lang);
 
-  // Location permission + coordinates for "shops near me".
-  const nearby = useNearbyLocation();
 
   // When we have a fix, rank by real distance; otherwise leave order untouched
   // so the catalogue never silently changes under the user.
@@ -278,13 +283,19 @@ export default function App() {
         )}
       </View>
 
-      <MobileBottomNav
-        currentScreen={screen}
-        cartCount={cart.length}
-        loggedIn={loggedIn}
-        onNavigate={handleNavigate}
-        t={currentT}
-      />
+      {/* Hidden during checkout and try-on: both have their own bottom-pinned
+          action bar (Place order / the camera shutter), and the floating nav
+          — position: 'absolute', zIndex: 999 — sat on top of it, visually
+          burying the actual button behind the ACCOUNT tab. */}
+      {screen !== 'checkout' && screen !== 'tryOn' && (
+        <MobileBottomNav
+          currentScreen={screen}
+          cartCount={cart.length}
+          loggedIn={loggedIn}
+          onNavigate={handleNavigate}
+          t={currentT}
+        />
+      )}
       </SafeAreaView>
     </SafeAreaProvider>
   );
